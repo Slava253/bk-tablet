@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>📱 BK PRO • ПЛАНШЕТ ВЫДАЧИ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>👑 BK КОРОНА • ЭКРАН ЗАКАЗОВ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -18,21 +18,30 @@
         body {
             background: #2b1b0e;
             min-height: 100vh;
-            padding: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+        /* ОСНОВНОЙ КОНТЕЙНЕР */
+        .display-container {
+            max-width: 1800px;
+            width: 100%;
+            background: #f8f2e6;
+            border-radius: 60px;
+            padding: 30px;
+            border: 5px solid #fec233;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
         /* ШАПКА */
         .header {
             background: #d62323;
             color: white;
-            padding: 16px 24px;
-            border-radius: 40px;
-            margin-bottom: 20px;
+            padding: 25px 30px;
+            border-radius: 50px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -42,221 +51,283 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 1.8rem;
+            gap: 20px;
+            font-size: 2.5rem;
             font-weight: 800;
+        }
+
+        .logo i {
+            color: #fec233;
+            font-size: 3rem;
         }
 
         .time {
             background: #2d2d2d;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-size: 1.2rem;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 2rem;
             border: 2px solid #fec233;
         }
 
-        /* ОСНОВНОЙ ЭКРАН С ДВУМЯ СТОЛБИКАМИ */
+        /* ТРИ КОЛОНКИ */
         .columns {
-            display: flex;
-            gap: 20px;
-            min-height: calc(100vh - 150px);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 20px;
         }
 
         .column {
-            flex: 1;
-            background: #f8f2e6;
+            background: #fef9ef;
             border-radius: 40px;
-            padding: 24px;
-            border: 3px solid #fec233;
-            display: flex;
-            flex-direction: column;
+            padding: 25px;
+            border: 3px dashed #d4a373;
+            min-height: 600px;
         }
 
         .column-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 15px;
+            margin-bottom: 25px;
             font-size: 2rem;
             font-weight: 800;
             color: #2d1d0c;
-            padding-bottom: 15px;
+            padding-bottom: 20px;
             border-bottom: 3px dashed #d4a373;
         }
 
         .column-header i {
             color: #c53a1f;
+            font-size: 2.2rem;
         }
 
-        .orders-list {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+        .badge {
+            background: #c53a1f;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            margin-left: 15px;
+        }
+
+        /* СЕТКА НОМЕРОВ */
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 15px;
-            min-height: 200px;
         }
 
-        /* КАРТОЧКА ЗАКАЗА */
-        .order-card {
+        /* КАРТОЧКА НОМЕРА */
+        .number-card {
             background: white;
             border-radius: 30px;
-            padding: 20px;
+            padding: 20px 10px;
+            text-align: center;
             border: 3px solid #ba6b3c;
             box-shadow: 0 6px 0 #8f542e;
-            transition: 0.1s;
+            transition: all 0.2s;
             cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .order-card:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #8f542e;
+        .number-card.waiting {
+            border-left: 10px solid #ff9800;
+        }
+
+        .number-card.ready {
+            border-left: 10px solid #4CAF50;
+        }
+
+        .number-card.done {
+            border-left: 10px solid #808080;
+            opacity: 0.7;
+        }
+
+        .number-card.big {
+            grid-column: span 2;
+            padding: 30px 15px;
         }
 
         .order-number {
             font-size: 3rem;
             font-weight: 900;
             color: #c53a1f;
-            text-align: center;
+            line-height: 1;
             margin-bottom: 10px;
         }
 
-        .order-items {
-            font-size: 1.1rem;
+        .client-name {
+            font-size: 1.2rem;
             color: #2d1d0c;
-            margin-bottom: 10px;
-            padding: 10px;
-            background: #fff2d7;
-            border-radius: 20px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        .order-total {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #2d1d0c;
-            text-align: right;
-        }
-
-        .order-client {
-            color: #c53a1f;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        /* СТАТУСЫ */
-        .waiting .order-card {
-            border-left: 10px solid #ff9800;
-        }
-
-        .ready .order-card {
-            border-left: 10px solid #4CAF50;
-        }
-
-        /* КНОПКИ ДЕЙСТВИЙ */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            cursor: pointer;
-            box-shadow: 0 4px 0 #6a3f19;
-            transition: 0.1s;
-        }
-
-        .action-btn:active {
-            transform: translateY(4px);
-            box-shadow: none;
-        }
-
-        .ready-btn {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .done-btn {
+        .crowns {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background: #fec233;
             color: #2d1d0c;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 1rem;
         }
 
-        .info-text {
+        .time-ago {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* СТАТУС БАР */
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0 20px;
+            padding: 20px;
+            background: #fff2d7;
+            border-radius: 50px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .dot-waiting { background: #ff9800; }
+        .dot-ready { background: #4CAF50; }
+        .dot-done { background: #808080; }
+
+        /* АНИМАЦИИ */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .number-card.new {
+            animation: pulse 1s ease infinite;
+            border-color: #fec233;
+        }
+
+        /* ПУСТЫЕ СОСТОЯНИЯ */
+        .empty-state {
             text-align: center;
             color: #666;
-            padding: 40px;
-            font-size: 1.2rem;
+            padding: 40px 20px;
+            font-size: 1.5rem;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 60px;
-            font-weight: 700;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbad86;
+            margin-bottom: 15px;
+        }
+
+        /* АДАПТАЦИЯ */
+        @media (max-width: 1200px) {
+            .columns {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .order-number { font-size: 2.5rem; }
         }
 
         @media (max-width: 768px) {
             .columns {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
-            
-            .order-number {
-                font-size: 2.5rem;
-            }
-            
             .header {
                 flex-direction: column;
                 text-align: center;
-                gap: 10px;
+                gap: 15px;
             }
+            .logo { font-size: 2rem; }
+            .time { font-size: 1.5rem; }
+        }
+
+        @media (min-width: 1600px) {
+            .numbers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .order-number { font-size: 3.5rem; }
         }
     </style>
 </head>
 <body>
-    <div id="notification" class="notification">🔔 Новый заказ!</div>
-
-    <div class="container">
+    <div class="display-container">
+        <!-- ШАПКА -->
         <div class="header">
             <div class="logo">
                 <i class="fas fa-crown"></i>
-                <span>BK PRO • ВЫДАЧА</span>
+                <span>BK КОРОНА • ЭКРАН ЗАКАЗОВ</span>
             </div>
             <div class="time" id="liveTime">12:00:00</div>
         </div>
 
-        <!-- ДВА СТОЛБИКА -->
+        <!-- СТАТУС БАР -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-dot dot-waiting"></span>
+                <span>Готовится</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot dot-ready"></span>
+                <span>Готов к выдаче</span>
+            </div>
+            <div class="status-item">
+                <span class="status-dot dot-done"></span>
+                <span>Выдан</span>
+            </div>
+        </div>
+
+        <!-- ТРИ КОЛОНКИ -->
         <div class="columns">
-            <!-- СТОЛБИК 1: ГОТОВИТСЯ -->
+            <!-- КОЛОНКА 1: ГОТОВИТСЯ -->
             <div class="column">
                 <div class="column-header">
                     <i class="fas fa-clock"></i>
                     <span>ГОТОВИТСЯ</span>
                     <span class="badge" id="waitingCount">0</span>
                 </div>
-                <div class="orders-list" id="waitingOrders"></div>
+                <div class="numbers-grid" id="waitingNumbers"></div>
             </div>
 
-            <!-- СТОЛБИК 2: ГОТОВО -->
+            <!-- КОЛОНКА 2: ГОТОВО -->
             <div class="column">
                 <div class="column-header">
                     <i class="fas fa-check-circle"></i>
                     <span>ГОТОВО</span>
                     <span class="badge" id="readyCount">0</span>
                 </div>
-                <div class="orders-list" id="readyOrders"></div>
+                <div class="numbers-grid" id="readyNumbers"></div>
+            </div>
+
+            <!-- КОЛОНКА 3: ВЫДАНО (ИСТОРИЯ) -->
+            <div class="column">
+                <div class="column-header">
+                    <i class="fas fa-history"></i>
+                    <span>ВЫДАНО</span>
+                    <span class="badge" id="doneCount">0</span>
+                </div>
+                <div class="numbers-grid" id="doneNumbers"></div>
             </div>
         </div>
     </div>
@@ -275,7 +346,11 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let orders = {};
+        let orders = {
+            waiting: {},
+            ready: {},
+            done: {}
+        };
 
         // ========== ЖИВЫЕ ЧАСЫ ==========
         function updateTime() {
@@ -286,19 +361,33 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // ========== СЛУШАЕМ ИЗМЕНЕНИЯ ==========
+        // ========== ФОРМАТИРОВАНИЕ ВРЕМЕНИ ==========
+        function getTimeAgo(timestamp) {
+            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+            
+            if (seconds < 60) return `${seconds} сек назад`;
+            if (seconds < 3600) return `${Math.floor(seconds / 60)} мин назад`;
+            return `${Math.floor(seconds / 3600)} ч назад`;
+        }
+
+        // ========== СЛУШАТЕЛЬ ЗАКАЗОВ ==========
         function setupFirebaseListener() {
             // Новые заказы
             db.ref('orders').on('child_added', (snapshot) => {
                 const order = snapshot.val();
                 const orderNum = snapshot.key;
                 
-                if (order.status !== 'done') {
-                    orders[orderNum] = { ...order, status: order.status || 'waiting' };
+                if (order.status === 'waiting') {
+                    orders.waiting[orderNum] = order;
                     showNotification('Новый заказ #' + orderNum);
-                    updateDisplays();
-                    if (navigator.vibrate) navigator.vibrate(200);
+                } else if (order.status === 'ready') {
+                    orders.ready[orderNum] = order;
+                } else if (order.status === 'done') {
+                    orders.done[orderNum] = order;
                 }
+                
+                updateDisplays();
+                if (navigator.vibrate) navigator.vibrate(200);
             });
 
             // Изменения заказов
@@ -306,117 +395,132 @@
                 const order = snapshot.val();
                 const orderNum = snapshot.key;
                 
-                if (order.status === 'done') {
-                    delete orders[orderNum];
-                } else if (orders[orderNum]) {
-                    orders[orderNum].status = order.status;
+                // Удаляем из всех колонок
+                delete orders.waiting[orderNum];
+                delete orders.ready[orderNum];
+                delete orders.done[orderNum];
+                
+                // Добавляем в нужную
+                if (order.status === 'waiting') {
+                    orders.waiting[orderNum] = order;
+                } else if (order.status === 'ready') {
+                    orders.ready[orderNum] = order;
+                } else if (order.status === 'done') {
+                    orders.done[orderNum] = order;
+                    
+                    // Ограничим историю последними 20 заказами
+                    const doneKeys = Object.keys(orders.done);
+                    if (doneKeys.length > 20) {
+                        const oldest = doneKeys.sort()[0];
+                        delete orders.done[oldest];
+                    }
                 }
                 
-                updateDisplays();
-            });
-
-            // Удаление заказов
-            db.ref('orders').on('child_removed', (snapshot) => {
-                const orderNum = snapshot.key;
-                delete orders[orderNum];
                 updateDisplays();
             });
         }
 
         // ========== ОБНОВЛЕНИЕ ЭКРАНОВ ==========
         function updateDisplays() {
-            const waitingDiv = document.getElementById('waitingOrders');
-            const readyDiv = document.getElementById('readyOrders');
-            
-            let waitingHtml = '';
-            let readyHtml = '';
-            let waitingCount = 0;
-            let readyCount = 0;
-            
-            Object.entries(orders).forEach(([num, data]) => {
-                const itemsList = data.items.map(i => `${i.name} x${i.quantity}`).join(', ');
-                const clientName = data.userName || 'Клиент';
-                
-                if (data.status === 'waiting') {
-                    waitingCount++;
-                    waitingHtml += `
-                        <div class="order-card waiting">
-                            <div class="order-number">#${num}</div>
-                            <div class="order-client"><i class="fas fa-user"></i> ${clientName}</div>
-                            <div class="order-items">${itemsList}</div>
-                            <div class="order-total">${data.total} ₽</div>
-                            <div class="action-buttons">
-                                <button class="action-btn ready-btn" onclick="moveToReady('${num}')">
-                                    <i class="fas fa-check"></i> ГОТОВО
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                } else if (data.status === 'ready') {
-                    readyCount++;
-                    readyHtml += `
-                        <div class="order-card ready">
-                            <div class="order-number">#${num}</div>
-                            <div class="order-client"><i class="fas fa-user"></i> ${clientName}</div>
-                            <div class="order-items">${itemsList}</div>
-                            <div class="order-total">${data.total} ₽</div>
-                            <div class="action-buttons">
-                                <button class="action-btn done-btn" onclick="completeOrder('${num}')">
-                                    <i class="fas fa-hand-holding-heart"></i> ВЫДАТЬ
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            waitingDiv.innerHTML = waitingHtml || '<div class="info-text">⏳ Нет заказов</div>';
-            readyDiv.innerHTML = readyHtml || '<div class="info-text">✅ Нет готовых заказов</div>';
-            
-            document.getElementById('waitingCount').innerText = waitingCount;
-            document.getElementById('readyCount').innerText = readyCount;
+            updateColumn('waiting', 'waitingNumbers', 'waitingCount');
+            updateColumn('ready', 'readyNumbers', 'readyCount');
+            updateColumn('done', 'doneNumbers', 'doneCount');
         }
 
-        // ========== ПЕРЕМЕСТИТЬ В ГОТОВО ==========
-        window.moveToReady = (orderNum) => {
-            if (orders[orderNum]) {
-                orders[orderNum].status = 'ready';
-                db.ref('orders/' + orderNum).update({ 
-                    status: 'ready', 
-                    readyAt: Date.now() 
-                });
-                showNotification(`✅ Заказ #${orderNum} готов`);
-                if (navigator.vibrate) navigator.vibrate(100);
+        function updateColumn(status, elementId, countId) {
+            const container = document.getElementById(elementId);
+            const ordersList = orders[status];
+            const count = Object.keys(ordersList).length;
+            
+            document.getElementById(countId).innerText = count;
+            
+            if (count === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas ${status === 'waiting' ? 'fa-clock' : status === 'ready' ? 'fa-check-circle' : 'fa-history'}"></i>
+                        <p>Нет заказов</p>
+                    </div>
+                `;
+                return;
             }
-        };
 
-        // ========== ВЫДАТЬ ЗАКАЗ (УДАЛИТЬ) ==========
-        window.completeOrder = (orderNum) => {
-            if (orders[orderNum]) {
-                // Можно удалить полностью или отметить как done
-                db.ref('orders/' + orderNum).update({ 
-                    status: 'done', 
-                    doneAt: Date.now() 
-                });
-                // Или удалить: db.ref('orders/' + orderNum).remove();
+            let html = '';
+            
+            // Сортируем по времени (новые сверху)
+            const sortedOrders = Object.entries(ordersList).sort((a, b) => {
+                return b[1].createdAt - a[1].createdAt;
+            });
+
+            sortedOrders.forEach(([num, order]) => {
+                const crownBonus = Math.floor(order.total / 100);
+                const timeAgo = getTimeAgo(order.createdAt);
+                const isNew = Date.now() - order.createdAt < 30000; // новые 30 секунд
                 
-                delete orders[orderNum];
-                showNotification(`🛒 Заказ #${orderNum} выдан`);
-                updateDisplays();
-                if (navigator.vibrate) navigator.vibrate(100);
-            }
-        };
+                let statusClass = '';
+                if (status === 'waiting') statusClass = 'waiting';
+                else if (status === 'ready') statusClass = 'ready';
+                else statusClass = 'done';
+                
+                // Для больших номеров на маленьких экранах
+                const extraClass = count < 5 ? 'big' : '';
+                
+                html += `
+                    <div class="number-card ${statusClass} ${extraClass} ${isNew ? 'new' : ''}">
+                        <div class="crowns">
+                            <i class="fas fa-crown"></i> ${crownBonus}
+                        </div>
+                        <div class="order-number">#${num}</div>
+                        <div class="client-name">
+                            <i class="fas fa-user"></i> ${order.userName || 'Клиент'}
+                        </div>
+                        <div class="time-ago">
+                            <i class="fas fa-clock"></i> ${timeAgo}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
 
-        // ========== УВЕДОМЛЕНИЕ ==========
+        // ========== УВЕДОМЛЕНИЯ ==========
         function showNotification(text) {
-            const notif = document.getElementById('notification');
-            notif.innerHTML = `🔔 ${text}`;
-            notif.style.display = 'block';
-            setTimeout(() => notif.style.display = 'none', 3000);
+            // Создаём временное уведомление
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 60px;
+                font-weight: 700;
+                z-index: 1000;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s;
+            `;
+            notification.innerHTML = `🔔 ${text}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
 
         // ========== ЗАПУСК ==========
         setupFirebaseListener();
+
+        // Очистка старых заказов из done каждые 5 минут
+        setInterval(() => {
+            const oneHourAgo = Date.now() - 3600000;
+            Object.entries(orders.done).forEach(([num, order]) => {
+                if (order.createdAt < oneHourAgo) {
+                    delete orders.done[num];
+                }
+            });
+            updateDisplays();
+        }, 300000);
     </script>
 </body>
 </html>
