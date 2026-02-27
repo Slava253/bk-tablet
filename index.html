@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>📱 BK PRO • ПЛАНШЕТ ВЫДАЧИ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background: #2b1b0e;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ШАПКА */
+        .header {
+            background: #d62323;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 3px solid #fec233;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .time {
+            background: #2d2d2d;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            border: 2px solid #fec233;
+        }
+
+        /* ОСНОВНОЙ ЭКРАН С ДВУМЯ СТОЛБИКАМИ */
+        .columns {
+            display: flex;
+            gap: 20px;
+            min-height: calc(100vh - 150px);
+        }
+
+        .column {
+            flex: 1;
+            background: #f8f2e6;
+            border-radius: 40px;
+            padding: 24px;
+            border: 3px solid #fec233;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2d1d0c;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed #d4a373;
+        }
+
+        .column-header i {
+            color: #c53a1f;
+        }
+
+        .orders-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 200px;
+        }
+
+        /* КАРТОЧКА ЗАКАЗА */
+        .order-card {
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            border: 3px solid #ba6b3c;
+            box-shadow: 0 6px 0 #8f542e;
+            transition: 0.1s;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .order-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #8f542e;
+        }
+
+        .order-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #c53a1f;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .order-items {
+            font-size: 1.1rem;
+            color: #2d1d0c;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fff2d7;
+            border-radius: 20px;
+        }
+
+        .order-total {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #2d1d0c;
+            text-align: right;
+        }
+
+        .order-client {
+            color: #c53a1f;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        /* СТАТУСЫ */
+        .waiting .order-card {
+            border-left: 10px solid #ff9800;
+        }
+
+        .ready .order-card {
+            border-left: 10px solid #4CAF50;
+        }
+
+        /* КНОПКИ ДЕЙСТВИЙ */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #6a3f19;
+            transition: 0.1s;
+        }
+
+        .action-btn:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .ready-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .done-btn {
+            background: #fec233;
+            color: #2d1d0c;
+        }
+
+        .info-text {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+            font-size: 1.2rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 60px;
+            font-weight: 700;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .columns {
+                flex-direction: column;
+            }
+            
+            .order-number {
+                font-size: 2.5rem;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="notification" class="notification">🔔 Новый заказ!</div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-crown"></i>
+                <span>BK PRO • ВЫДАЧА</span>
+            </div>
+            <div class="time" id="liveTime">12:00:00</div>
+        </div>
+
+        <!-- ДВА СТОЛБИКА -->
+        <div class="columns">
+            <!-- СТОЛБИК 1: ГОТОВИТСЯ -->
+            <div class="column">
+                <div class="column-header">
+                    <i class="fas fa-clock"></i>
+                    <span>ГОТОВИТСЯ</span>
+                    <span class="badge" id="waitingCount">0</span>
+                </div>
+                <div class="orders-list" id="waitingOrders"></div>
+            </div>
+
+            <!-- СТОЛБИК 2: ГОТОВО -->
+            <div class="column">
+                <div class="column-header">
+                    <i class="fas fa-check-circle"></i>
+                    <span>ГОТОВО</span>
+                    <span class="badge" id="readyCount">0</span>
+                </div>
+                <div class="orders-list" id="readyOrders"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBlZ5ZtyTXgtXxSXJAx1jOxwhTrzlHRJmo",
+            authDomain: "bk-cashier.firebaseapp.com",
+            databaseURL: "https://bk-cashier-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "bk-cashier",
+            storageBucket: "bk-cashier.firebasestorage.app",
+            messagingSenderId: "385000840969",
+            appId: "1:385000840969:web:1ec8d09176b6551dc0fdd8"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let orders = {};
+
+        // ========== ЖИВЫЕ ЧАСЫ ==========
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('ru-RU');
+            document.getElementById('liveTime').innerText = timeStr;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // ========== СЛУШАЕМ ИЗМЕНЕНИЯ ==========
+        function setupFirebaseListener() {
+            // Новые заказы
+            db.ref('orders').on('child_added', (snapshot) => {
+                const order = snapshot.val();
+                const orderNum = snapshot.key;
+                
+                if (order.status !== 'done') {
+                    orders[orderNum] = { ...order, status: order.status || 'waiting' };
+                    showNotification('Новый заказ #' + orderNum);
+                    updateDisplays();
+                    if (navigator.vibrate) navigator.vibrate(200);
+                }
+            });
+
+            // Изменения заказов
+            db.ref('orders').on('child_changed', (snapshot) => {
+                const order = snapshot.val();
+                const orderNum = snapshot.key;
+                
+                if (order.status === 'done') {
+                    delete orders[orderNum];
+                } else if (orders[orderNum]) {
+                    orders[orderNum].status = order.status;
+                }
+                
+                updateDisplays();
+            });
+
+            // Удаление заказов
+            db.ref('orders').on('child_removed', (snapshot) => {
+                const orderNum = snapshot.key;
+                delete orders[orderNum];
+                updateDisplays();
+            });
+        }
+
+        // ========== ОБНОВЛЕНИЕ ЭКРАНОВ ==========
+        function updateDisplays() {
+            const waitingDiv = document.getElementById('waitingOrders');
+            const readyDiv = document.getElementById('readyOrders');
+            
+            let waitingHtml = '';
+            let readyHtml = '';
+            let waitingCount = 0;
+            let readyCount = 0;
+            
+            Object.entries(orders).forEach(([num, data]) => {
+                const itemsList = data.items.map(i => `${i.name} x${i.quantity}`).join(', ');
+                const clientName = data.userName || 'Клиент';
+                
+                if (data.status === 'waiting') {
+                    waitingCount++;
+                    waitingHtml += `
+                        <div class="order-card waiting">
+                            <div class="order-number">#${num}</div>
+                            <div class="order-client"><i class="fas fa-user"></i> ${clientName}</div>
+                            <div class="order-items">${itemsList}</div>
+                            <div class="order-total">${data.total} ₽</div>
+                            <div class="action-buttons">
+                                <button class="action-btn ready-btn" onclick="moveToReady('${num}')">
+                                    <i class="fas fa-check"></i> ГОТОВО
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else if (data.status === 'ready') {
+                    readyCount++;
+                    readyHtml += `
+                        <div class="order-card ready">
+                            <div class="order-number">#${num}</div>
+                            <div class="order-client"><i class="fas fa-user"></i> ${clientName}</div>
+                            <div class="order-items">${itemsList}</div>
+                            <div class="order-total">${data.total} ₽</div>
+                            <div class="action-buttons">
+                                <button class="action-btn done-btn" onclick="completeOrder('${num}')">
+                                    <i class="fas fa-hand-holding-heart"></i> ВЫДАТЬ
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            waitingDiv.innerHTML = waitingHtml || '<div class="info-text">⏳ Нет заказов</div>';
+            readyDiv.innerHTML = readyHtml || '<div class="info-text">✅ Нет готовых заказов</div>';
+            
+            document.getElementById('waitingCount').innerText = waitingCount;
+            document.getElementById('readyCount').innerText = readyCount;
+        }
+
+        // ========== ПЕРЕМЕСТИТЬ В ГОТОВО ==========
+        window.moveToReady = (orderNum) => {
+            if (orders[orderNum]) {
+                orders[orderNum].status = 'ready';
+                db.ref('orders/' + orderNum).update({ 
+                    status: 'ready', 
+                    readyAt: Date.now() 
+                });
+                showNotification(`✅ Заказ #${orderNum} готов`);
+                if (navigator.vibrate) navigator.vibrate(100);
+            }
+        };
+
+        // ========== ВЫДАТЬ ЗАКАЗ (УДАЛИТЬ) ==========
+        window.completeOrder = (orderNum) => {
+            if (orders[orderNum]) {
+                // Можно удалить полностью или отметить как done
+                db.ref('orders/' + orderNum).update({ 
+                    status: 'done', 
+                    doneAt: Date.now() 
+                });
+                // Или удалить: db.ref('orders/' + orderNum).remove();
+                
+                delete orders[orderNum];
+                showNotification(`🛒 Заказ #${orderNum} выдан`);
+                updateDisplays();
+                if (navigator.vibrate) navigator.vibrate(100);
+            }
+        };
+
+        // ========== УВЕДОМЛЕНИЕ ==========
+        function showNotification(text) {
+            const notif = document.getElementById('notification');
+            notif.innerHTML = `🔔 ${text}`;
+            notif.style.display = 'block';
+            setTimeout(() => notif.style.display = 'none', 3000);
+        }
+
+        // ========== ЗАПУСК ==========
+        setupFirebaseListener();
+    </script>
+</body>
+</html>
