@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-    <title>👑 BK КОРОНА • ЭКРАН ЗАКАЗОВ</title>
+    <title>👑 WHOPPER BAR • ПЛАНШЕТ КЛИЕНТА</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -18,24 +18,25 @@
         body {
             background: #2b1b0e;
             min-height: 100vh;
-            padding: 15px;
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* ОСНОВНОЙ КОНТЕЙНЕР */
-        .display-container {
-            max-width: 1800px;
+        .tablet-container {
+            max-width: 1200px;
             width: 100%;
             background: #f8f2e6;
             border-radius: 60px;
             padding: 30px;
             border: 5px solid #fec233;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            min-height: 800px;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* ШАПКА */
         .header {
             background: #d62323;
             color: white;
@@ -52,13 +53,13 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
         }
 
         .logo i {
             color: #fec233;
-            font-size: 3rem;
+            font-size: 2.8rem;
         }
 
         .time {
@@ -69,265 +70,271 @@
             border: 2px solid #fec233;
         }
 
-        /* ТРИ КОЛОНКИ */
-        .columns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .column {
-            background: #fef9ef;
-            border-radius: 40px;
-            padding: 25px;
-            border: 3px dashed #d4a373;
-            min-height: 600px;
-        }
-
-        .column-header {
+        .waiting-mode {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-            font-size: 2rem;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .waiting-title {
+            font-size: 2.5rem;
             font-weight: 800;
             color: #2d1d0c;
-            padding-bottom: 20px;
-            border-bottom: 3px dashed #d4a373;
+            text-align: center;
+            margin: 20px 0 40px;
         }
 
-        .column-header i {
-            color: #c53a1f;
-            font-size: 2.2rem;
-        }
-
-        .badge {
-            background: #c53a1f;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 1.5rem;
-            margin-left: 15px;
-        }
-
-        /* СЕТКА НОМЕРОВ */
-        .numbers-grid {
+        .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
         }
 
-        /* КАРТОЧКА НОМЕРА */
-        .number-card {
+        .menu-item-card {
             background: white;
             border-radius: 30px;
-            padding: 20px 10px;
+            padding: 25px 20px;
             text-align: center;
-            border: 3px solid #ba6b3c;
-            box-shadow: 0 6px 0 #8f542e;
-            transition: all 0.2s;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            border: 3px solid #d8a76b;
+            box-shadow: 0 8px 0 #b57c42;
+            transition: 0.1s;
         }
 
-        .number-card.waiting {
-            border-left: 10px solid #ff9800;
-        }
-
-        .number-card.ready {
-            border-left: 10px solid #4CAF50;
-        }
-
-        .number-card.done {
-            border-left: 10px solid #808080;
-            opacity: 0.7;
-        }
-
-        .number-card.big {
-            grid-column: span 2;
-            padding: 30px 15px;
-        }
-
-        .order-number {
+        .menu-item-card i {
             font-size: 3rem;
-            font-weight: 900;
             color: #c53a1f;
-            line-height: 1;
+            margin-bottom: 15px;
+        }
+
+        .menu-item-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d1d0c;
             margin-bottom: 10px;
         }
 
-        .client-name {
-            font-size: 1.2rem;
-            color: #2d1d0c;
-            margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .menu-item-price {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #c1411b;
         }
 
-        .crowns {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #fec233;
-            color: #2d1d0c;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-weight: 700;
+        .order-mode {
+            display: none;
+            flex: 1;
+        }
+
+        .order-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 5px;
-            font-size: 1rem;
+            margin-bottom: 30px;
+            padding: 0 10px;
         }
 
-        .time-ago {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 5px;
+        .order-header h2 {
+            font-size: 2.5rem;
+            color: #c53a1f;
         }
 
-        /* СТАТУС БАР */
-        .status-bar {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 30px 0 20px;
-            padding: 20px;
+        .order-items {
             background: #fff2d7;
+            border-radius: 40px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 3px solid #ba6b3c;
+            min-height: 400px;
+        }
+
+        .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid #cbad86;
+            font-size: 1.8rem;
+        }
+
+        .order-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 600;
+        }
+
+        .item-quantity {
+            background: #c1411b;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            margin: 0 20px;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: #c53a1f;
+            min-width: 120px;
+            text-align: right;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #312713;
+            color: #fddc9c;
+            padding: 25px 30px;
+            border-radius: 50px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-top: 20px;
+        }
+
+        .total-amount {
+            background: #ebc87e;
+            color: #2d1f0c;
+            padding: 15px 40px;
             border-radius: 50px;
         }
 
-        .status-item {
-            display: flex;
+        .order-number-mode {
+            display: none;
+            flex: 1;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            font-size: 1.3rem;
+            flex-direction: column;
         }
 
-        .status-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .order-number-box {
+            background: white;
+            border-radius: 80px;
+            padding: 60px;
+            text-align: center;
+            border: 8px solid #4CAF50;
+            box-shadow: 0 20px 0 #2d6a2d;
+            max-width: 700px;
+            width: 100%;
         }
 
-        .dot-waiting { background: #ff9800; }
-        .dot-ready { background: #4CAF50; }
-        .dot-done { background: #808080; }
+        .order-number-label {
+            font-size: 2.5rem;
+            color: #2d1d0c;
+            margin-bottom: 30px;
+        }
 
-        /* АНИМАЦИИ */
+        .order-number-display {
+            font-size: 8rem;
+            font-weight: 900;
+            color: #c53a1f;
+            background: #fff2d7;
+            padding: 40px;
+            border-radius: 60px;
+            margin: 30px 0;
+            border: 3px solid #d8a76b;
+        }
+
+        .order-number-timer {
+            font-size: 2rem;
+            color: #666;
+        }
+
+        .order-number-timer i {
+            color: #ff9800;
+            margin-right: 10px;
+        }
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
 
-        .number-card.new {
-            animation: pulse 1s ease infinite;
-            border-color: #fec233;
+        .pulse {
+            animation: pulse 1s infinite;
         }
 
-        /* ПУСТЫЕ СОСТОЯНИЯ */
-        .empty-state {
-            text-align: center;
-            color: #666;
-            padding: 40px 20px;
-            font-size: 1.5rem;
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .empty-state i {
-            font-size: 4rem;
-            color: #cbad86;
-            margin-bottom: 15px;
+        .fade-in {
+            animation: slideIn 0.5s ease-out;
         }
 
-        /* АДАПТАЦИЯ */
-        @media (max-width: 1200px) {
-            .columns {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .order-number { font-size: 2.5rem; }
+        .timer-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 30px;
+            margin-top: 30px;
+            overflow: hidden;
+        }
+
+        .timer-progress {
+            height: 100%;
+            background: #4CAF50;
+            width: 100%;
+            transition: width 1s linear;
         }
 
         @media (max-width: 768px) {
-            .columns {
-                grid-template-columns: 1fr;
+            .tablet-container {
+                padding: 15px;
             }
-            .header {
-                flex-direction: column;
-                text-align: center;
-                gap: 15px;
+            
+            .order-number-display {
+                font-size: 5rem;
             }
-            .logo { font-size: 2rem; }
-            .time { font-size: 1.5rem; }
-        }
-
-        @media (min-width: 1600px) {
-            .numbers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            
+            .order-item-row {
+                font-size: 1.4rem;
             }
-            .order-number { font-size: 3.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="display-container">
-        <!-- ШАПКА -->
+    <div class="tablet-container">
         <div class="header">
             <div class="logo">
                 <i class="fas fa-crown"></i>
-                <span>BK КОРОНА • ЭКРАН ЗАКАЗОВ</span>
+                <span>WHOPPER BAR</span>
             </div>
             <div class="time" id="liveTime">12:00:00</div>
         </div>
 
-        <!-- СТАТУС БАР -->
-        <div class="status-bar">
-            <div class="status-item">
-                <span class="status-dot dot-waiting"></span>
-                <span>Готовится</span>
+        <div id="waitingMode" class="waiting-mode">
+            <div class="waiting-title">
+                <i class="fas fa-utensils"></i> НАШЕ МЕНЮ
             </div>
-            <div class="status-item">
-                <span class="status-dot dot-ready"></span>
-                <span>Готов к выдаче</span>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+
+        <div id="orderMode" class="order-mode">
+            <div class="order-header">
+                <h2><i class="fas fa-shopping-basket"></i> ТЕКУЩИЙ ЗАКАЗ</h2>
             </div>
-            <div class="status-item">
-                <span class="status-dot dot-done"></span>
-                <span>Выдан</span>
+            <div class="order-items" id="orderItemsList"></div>
+            <div class="order-total">
+                <span>ИТОГО К ОПЛАТЕ:</span>
+                <span class="total-amount" id="orderTotalAmount">0 ₽</span>
             </div>
         </div>
 
-        <!-- ТРИ КОЛОНКИ -->
-        <div class="columns">
-            <!-- КОЛОНКА 1: ГОТОВИТСЯ -->
-            <div class="column">
-                <div class="column-header">
+        <div id="orderNumberMode" class="order-number-mode">
+            <div class="order-number-box fade-in">
+                <div class="order-number-label">✅ ВАШ ЗАКАЗ ОФОРМЛЕН</div>
+                <div class="order-number-display" id="orderNumberDisplay">1234</div>
+                <div class="order-number-timer">
                     <i class="fas fa-clock"></i>
-                    <span>ГОТОВИТСЯ</span>
-                    <span class="badge" id="waitingCount">0</span>
+                    <span id="timerSeconds">10</span> сек
                 </div>
-                <div class="numbers-grid" id="waitingNumbers"></div>
-            </div>
-
-            <!-- КОЛОНКА 2: ГОТОВО -->
-            <div class="column">
-                <div class="column-header">
-                    <i class="fas fa-check-circle"></i>
-                    <span>ГОТОВО</span>
-                    <span class="badge" id="readyCount">0</span>
+                <div class="timer-bar">
+                    <div class="timer-progress" id="timerProgress"></div>
                 </div>
-                <div class="numbers-grid" id="readyNumbers"></div>
-            </div>
-
-            <!-- КОЛОНКА 3: ВЫДАНО (ИСТОРИЯ) -->
-            <div class="column">
-                <div class="column-header">
-                    <i class="fas fa-history"></i>
-                    <span>ВЫДАНО</span>
-                    <span class="badge" id="doneCount">0</span>
-                </div>
-                <div class="numbers-grid" id="doneNumbers"></div>
             </div>
         </div>
     </div>
@@ -346,13 +353,27 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let orders = {
-            waiting: {},
-            ready: {},
-            done: {}
-        };
+        const menuItems = [
+            { id: 1, name: 'Воппер', price: 199, icon: 'fa-burger' },
+            { id: 2, name: 'Чизбургер', price: 89, icon: 'fa-cheese' },
+            { id: 3, name: 'Двойной Воппер', price: 329, icon: 'fa-burger' },
+            { id: 4, name: 'Лонг Чикен', price: 219, icon: 'fa-drumstick-bite' },
+            { id: 5, name: 'Стрипсы 3шт', price: 149, icon: 'fa-drumstick' },
+            { id: 6, name: 'Наггетсы 6шт', price: 159, icon: 'fa-cubes' },
+            { id: 7, name: 'Картофель фри', price: 119, icon: 'fa-french-fries' },
+            { id: 8, name: 'Кола', price: 99, icon: 'fa-wine-bottle' },
+            { id: 9, name: 'Морс', price: 109, icon: 'fa-mug-hot' },
+            { id: 10, name: 'Пирожок', price: 89, icon: 'fa-cake-candles' },
+            { id: 11, name: 'Двойной Чизбургер', price: 179, icon: 'fa-cheese' },
+            { id: 12, name: 'Биг Спешиал', price: 299, icon: 'fa-burger' },
+            { id: 13, name: 'Чикен Премьер', price: 249, icon: 'fa-drumstick-bite' },
+            { id: 14, name: 'Роял Чизбургер', price: 199, icon: 'fa-cheese' },
+            { id: 15, name: 'Бекон Бургер', price: 229, icon: 'fa-bacon' }
+        ];
 
-        // ========== ЖИВЫЕ ЧАСЫ ==========
+        let timerInterval = null;
+        let timerSeconds = 10;
+
         function updateTime() {
             const now = new Date();
             const timeStr = now.toLocaleTimeString('ru-RU');
@@ -361,166 +382,98 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // ========== ФОРМАТИРОВАНИЕ ВРЕМЕНИ ==========
-        function getTimeAgo(timestamp) {
-            const seconds = Math.floor((Date.now() - timestamp) / 1000);
+        function renderMenu() {
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = '';
             
-            if (seconds < 60) return `${seconds} сек назад`;
-            if (seconds < 3600) return `${Math.floor(seconds / 60)} мин назад`;
-            return `${Math.floor(seconds / 3600)} ч назад`;
+            menuItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'menu-item-card';
+                card.innerHTML = `
+                    <i class="fas ${item.icon}"></i>
+                    <div class="menu-item-name">${item.name}</div>
+                    <div class="menu-item-price">${item.price} ₽</div>
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        // ========== СЛУШАТЕЛЬ ЗАКАЗОВ ==========
+        function showWaitingMode() {
+            document.getElementById('waitingMode').style.display = 'flex';
+            document.getElementById('orderMode').style.display = 'none';
+            document.getElementById('orderNumberMode').style.display = 'none';
+        }
+
+        function showOrderMode(order) {
+            document.getElementById('waitingMode').style.display = 'none';
+            document.getElementById('orderMode').style.display = 'block';
+            document.getElementById('orderNumberMode').style.display = 'none';
+            
+            const orderList = document.getElementById('orderItemsList');
+            let itemsHtml = '';
+            let total = 0;
+            
+            order.items.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                itemsHtml += `
+                    <div class="order-item-row fade-in">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-quantity">x${item.quantity}</span>
+                        <span class="item-price">${itemTotal} ₽</span>
+                    </div>
+                `;
+            });
+            
+            orderList.innerHTML = itemsHtml;
+            document.getElementById('orderTotalAmount').innerText = total + ' ₽';
+        }
+
+        function showOrderNumberMode(orderNum) {
+            document.getElementById('waitingMode').style.display = 'none';
+            document.getElementById('orderMode').style.display = 'none';
+            document.getElementById('orderNumberMode').style.display = 'flex';
+            
+            document.getElementById('orderNumberDisplay').innerText = orderNum;
+            
+            timerSeconds = 10;
+            document.getElementById('timerSeconds').innerText = timerSeconds;
+            document.getElementById('timerProgress').style.width = '100%';
+            
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                document.getElementById('timerSeconds').innerText = timerSeconds;
+                document.getElementById('timerProgress').style.width = (timerSeconds * 10) + '%';
+                
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    showWaitingMode();
+                }
+            }, 1000);
+        }
+
         function setupFirebaseListener() {
-            // Новые заказы
-            db.ref('orders').on('child_added', (snapshot) => {
+            db.ref('currentOrder').on('value', (snapshot) => {
                 const order = snapshot.val();
-                const orderNum = snapshot.key;
-                
-                if (order.status === 'waiting') {
-                    orders.waiting[orderNum] = order;
-                    showNotification('Новый заказ #' + orderNum);
-                } else if (order.status === 'ready') {
-                    orders.ready[orderNum] = order;
-                } else if (order.status === 'done') {
-                    orders.done[orderNum] = order;
+                if (order && order.items && order.items.length > 0) {
+                    showOrderMode(order);
+                } else {
+                    showWaitingMode();
                 }
-                
-                updateDisplays();
-                if (navigator.vibrate) navigator.vibrate(200);
             });
 
-            // Изменения заказов
-            db.ref('orders').on('child_changed', (snapshot) => {
+            db.ref('paidOrders').limitToLast(1).on('child_added', (snapshot) => {
                 const order = snapshot.val();
-                const orderNum = snapshot.key;
-                
-                // Удаляем из всех колонок
-                delete orders.waiting[orderNum];
-                delete orders.ready[orderNum];
-                delete orders.done[orderNum];
-                
-                // Добавляем в нужную
-                if (order.status === 'waiting') {
-                    orders.waiting[orderNum] = order;
-                } else if (order.status === 'ready') {
-                    orders.ready[orderNum] = order;
-                } else if (order.status === 'done') {
-                    orders.done[orderNum] = order;
-                    
-                    // Ограничим историю последними 20 заказами
-                    const doneKeys = Object.keys(orders.done);
-                    if (doneKeys.length > 20) {
-                        const oldest = doneKeys.sort()[0];
-                        delete orders.done[oldest];
-                    }
+                if (order && order.orderNum) {
+                    showOrderNumberMode(order.orderNum);
                 }
-                
-                updateDisplays();
             });
         }
 
-        // ========== ОБНОВЛЕНИЕ ЭКРАНОВ ==========
-        function updateDisplays() {
-            updateColumn('waiting', 'waitingNumbers', 'waitingCount');
-            updateColumn('ready', 'readyNumbers', 'readyCount');
-            updateColumn('done', 'doneNumbers', 'doneCount');
-        }
-
-        function updateColumn(status, elementId, countId) {
-            const container = document.getElementById(elementId);
-            const ordersList = orders[status];
-            const count = Object.keys(ordersList).length;
-            
-            document.getElementById(countId).innerText = count;
-            
-            if (count === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas ${status === 'waiting' ? 'fa-clock' : status === 'ready' ? 'fa-check-circle' : 'fa-history'}"></i>
-                        <p>Нет заказов</p>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = '';
-            
-            // Сортируем по времени (новые сверху)
-            const sortedOrders = Object.entries(ordersList).sort((a, b) => {
-                return b[1].createdAt - a[1].createdAt;
-            });
-
-            sortedOrders.forEach(([num, order]) => {
-                const crownBonus = Math.floor(order.total / 100);
-                const timeAgo = getTimeAgo(order.createdAt);
-                const isNew = Date.now() - order.createdAt < 30000; // новые 30 секунд
-                
-                let statusClass = '';
-                if (status === 'waiting') statusClass = 'waiting';
-                else if (status === 'ready') statusClass = 'ready';
-                else statusClass = 'done';
-                
-                // Для больших номеров на маленьких экранах
-                const extraClass = count < 5 ? 'big' : '';
-                
-                html += `
-                    <div class="number-card ${statusClass} ${extraClass} ${isNew ? 'new' : ''}">
-                        <div class="crowns">
-                            <i class="fas fa-crown"></i> ${crownBonus}
-                        </div>
-                        <div class="order-number">#${num}</div>
-                        <div class="client-name">
-                            <i class="fas fa-user"></i> ${order.userName || 'Клиент'}
-                        </div>
-                        <div class="time-ago">
-                            <i class="fas fa-clock"></i> ${timeAgo}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            container.innerHTML = html;
-        }
-
-        // ========== УВЕДОМЛЕНИЯ ==========
-        function showNotification(text) {
-            // Создаём временное уведомление
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #4CAF50;
-                color: white;
-                padding: 15px 25px;
-                border-radius: 60px;
-                font-weight: 700;
-                z-index: 1000;
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-                animation: slideIn 0.3s;
-            `;
-            notification.innerHTML = `🔔 ${text}`;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // ========== ЗАПУСК ==========
+        renderMenu();
         setupFirebaseListener();
-
-        // Очистка старых заказов из done каждые 5 минут
-        setInterval(() => {
-            const oneHourAgo = Date.now() - 3600000;
-            Object.entries(orders.done).forEach(([num, order]) => {
-                if (order.createdAt < oneHourAgo) {
-                    delete orders.done[num];
-                }
-            });
-            updateDisplays();
-        }, 300000);
+        showWaitingMode();
     </script>
 </body>
 </html>
