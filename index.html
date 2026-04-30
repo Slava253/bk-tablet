@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
-    <title>👑 WHOPPER BAR • ПЛАНШЕТ КЛИЕНТА</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>📺 ЗАЛ • WHOPPER BAR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -12,336 +12,199 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: 'Segoe UI', 'Courier New', monospace;
         }
 
         body {
-            background: #2b1b0e;
+            background: #0a0a0a;
             min-height: 100vh;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 20px;
         }
 
-        .tablet-container {
+        .board {
             max-width: 1200px;
-            width: 100%;
-            background: #f8f2e6;
-            border-radius: 60px;
-            padding: 30px;
-            border: 5px solid #fec233;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            min-height: 800px;
-            display: flex;
-            flex-direction: column;
+            margin: 0 auto;
         }
 
-        .header {
-            background: #d62323;
-            color: white;
-            padding: 25px 30px;
-            border-radius: 50px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 3px solid #fec233;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 2.2rem;
-            font-weight: 800;
-        }
-
-        .logo i {
+        h1 {
+            text-align: center;
             color: #fec233;
-            font-size: 2.8rem;
-        }
-
-        .time {
-            background: #2d2d2d;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 2rem;
-            border: 2px solid #fec233;
-        }
-
-        .waiting-mode {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .waiting-title {
             font-size: 2.5rem;
-            font-weight: 800;
-            color: #2d1d0c;
-            text-align: center;
-            margin: 20px 0 40px;
-        }
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .menu-item-card {
-            background: white;
-            border-radius: 30px;
-            padding: 25px 20px;
-            text-align: center;
-            border: 3px solid #d8a76b;
-            box-shadow: 0 8px 0 #b57c42;
-            transition: 0.1s;
-        }
-
-        .menu-item-card i {
-            font-size: 3rem;
-            color: #c53a1f;
-            margin-bottom: 15px;
-        }
-
-        .menu-item-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #2d1d0c;
-            margin-bottom: 10px;
-        }
-
-        .menu-item-price {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #c1411b;
-        }
-
-        .order-mode {
-            display: none;
-            flex: 1;
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 30px;
-            padding: 0 10px;
-        }
-
-        .order-header h2 {
-            font-size: 2.5rem;
-            color: #c53a1f;
-        }
-
-        .order-items {
-            background: #fff2d7;
-            border-radius: 40px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 3px solid #ba6b3c;
-            min-height: 400px;
-        }
-
-        .order-item-row {
+            text-shadow: 3px 3px 0 #c53a1f;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            border-bottom: 2px solid #cbad86;
-            font-size: 1.8rem;
-        }
-
-        .order-item-row:last-child {
-            border-bottom: none;
-        }
-
-        .item-name {
-            font-weight: 600;
-        }
-
-        .item-quantity {
-            background: #c1411b;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 40px;
-            font-weight: 700;
-            margin: 0 20px;
-        }
-
-        .item-price {
-            font-weight: 700;
-            color: #c53a1f;
-            min-width: 120px;
-            text-align: right;
-        }
-
-        .order-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #312713;
-            color: #fddc9c;
-            padding: 25px 30px;
-            border-radius: 50px;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-top: 20px;
-        }
-
-        .total-amount {
-            background: #ebc87e;
-            color: #2d1f0c;
-            padding: 15px 40px;
-            border-radius: 50px;
-        }
-
-        .order-number-mode {
-            display: none;
-            flex: 1;
             justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            gap: 15px;
         }
 
-        .order-number-box {
-            background: white;
-            border-radius: 80px;
-            padding: 60px;
+        .columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .column {
+            background: #1a1a1a;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 3px solid #fec233;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .column-header {
+            background: #c53a1f;
+            color: white;
+            padding: 20px;
             text-align: center;
-            border: 8px solid #4CAF50;
-            box-shadow: 0 20px 0 #2d6a2d;
-            max-width: 700px;
-            width: 100%;
+            font-size: 1.8rem;
+            font-weight: 800;
         }
 
-        .order-number-label {
-            font-size: 2.5rem;
-            color: #2d1d0c;
-            margin-bottom: 30px;
-        }
-
-        .order-number-display {
-            font-size: 8rem;
-            font-weight: 900;
-            color: #c53a1f;
-            background: #fff2d7;
-            padding: 40px;
-            border-radius: 60px;
-            margin: 30px 0;
-            border: 3px solid #d8a76b;
-        }
-
-        .order-number-timer {
-            font-size: 2rem;
-            color: #666;
-        }
-
-        .order-number-timer i {
-            color: #ff9800;
+        .column-header i {
             margin-right: 10px;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+        .column-header .count {
+            background: rgba(255,255,255,0.3);
+            border-radius: 40px;
+            padding: 5px 15px;
+            font-size: 1.2rem;
+            margin-left: 10px;
         }
 
-        .pulse {
-            animation: pulse 1s infinite;
+        .orders-list {
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-content: flex-start;
         }
 
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .order-number-card {
+            background: #2d2d2d;
+            border-radius: 20px;
+            padding: 20px 25px;
+            min-width: 120px;
+            text-align: center;
+            border-left: 6px solid;
+            animation: fadeIn 0.3s ease;
         }
 
-        .fade-in {
-            animation: slideIn 0.5s ease-out;
+        .order-number-card.waiting {
+            border-left-color: #ff9800;
+            background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
         }
 
-        .timer-bar {
+        .order-number-card.ready {
+            border-left-color: #4CAF50;
+            background: linear-gradient(135deg, #2d4a2d, #1f3a1f);
+        }
+
+        .order-number-card .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fec233;
+            font-family: 'Courier New', monospace;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #555;
+            padding: 50px;
+            font-size: 1.2rem;
             width: 100%;
-            height: 20px;
-            background: #f0f0f0;
-            border-radius: 30px;
+        }
+
+        .footer {
+            text-align: center;
             margin-top: 30px;
-            overflow: hidden;
+            color: #555;
+            font-size: 0.9rem;
         }
 
-        .timer-progress {
-            height: 100%;
-            background: #4CAF50;
-            width: 100%;
-            transition: width 1s linear;
+        .new-order {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); background: #ff9800; }
+            50% { transform: scale(1.05); background: #ffcc00; }
+            100% { transform: scale(1); background: #2d2d2d; }
         }
 
         @media (max-width: 768px) {
-            .tablet-container {
-                padding: 15px;
+            .columns {
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
-            
-            .order-number-display {
-                font-size: 5rem;
+            .order-number-card .number {
+                font-size: 1.8rem;
             }
-            
-            .order-item-row {
-                font-size: 1.4rem;
+            .column-header {
+                font-size: 1.3rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="tablet-container">
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-crown"></i>
-                <span>WHOPPER BAR</span>
-            </div>
-            <div class="time" id="liveTime">12:00:00</div>
-        </div>
-
-        <div id="waitingMode" class="waiting-mode">
-            <div class="waiting-title">
-                <i class="fas fa-utensils"></i> НАШЕ МЕНЮ
-            </div>
-            <div class="menu-grid" id="menuGrid"></div>
-        </div>
-
-        <div id="orderMode" class="order-mode">
-            <div class="order-header">
-                <h2><i class="fas fa-shopping-basket"></i> ТЕКУЩИЙ ЗАКАЗ</h2>
-            </div>
-            <div class="order-items" id="orderItemsList"></div>
-            <div class="order-total">
-                <span>ИТОГО К ОПЛАТЕ:</span>
-                <span class="total-amount" id="orderTotalAmount">0 ₽</span>
-            </div>
-        </div>
-
-        <div id="orderNumberMode" class="order-number-mode">
-            <div class="order-number-box fade-in">
-                <div class="order-number-label">✅ ВАШ ЗАКАЗ ОФОРМЛЕН</div>
-                <div class="order-number-display" id="orderNumberDisplay">1234</div>
-                <div class="order-number-timer">
-                    <i class="fas fa-clock"></i>
-                    <span id="timerSeconds">10</span> сек
+    <div class="board">
+        <h1>
+            <i class="fas fa-tv"></i>
+            ТАБЛО ЗАЛА
+            <i class="fas fa-utensils"></i>
+        </h1>
+        
+        <div class="columns">
+            <!-- Столбик "ГОТОВИТСЯ" -->
+            <div class="column">
+                <div class="column-header">
+                    <i class="fas fa-hourglass-half"></i>
+                    ГОТОВИТСЯ
+                    <span class="count" id="waitingCount">0</span>
                 </div>
-                <div class="timer-bar">
-                    <div class="timer-progress" id="timerProgress"></div>
+                <div class="orders-list" id="waitingList">
+                    <div class="empty-message">
+                        <i class="fas fa-check-circle"></i> Нет заказов
+                    </div>
                 </div>
             </div>
+
+            <!-- Столбик "ГОТОВ" -->
+            <div class="column">
+                <div class="column-header">
+                    <i class="fas fa-check-circle"></i>
+                    ГОТОВО К ВЫДАЧЕ
+                    <span class="count" id="readyCount">0</span>
+                </div>
+                <div class="orders-list" id="readyList">
+                    <div class="empty-message">
+                        <i class="fas fa-smile"></i> Нет заказов
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <i class="fas fa-sync-alt fa-spin"></i> Автообновление • Только заказы в ресторане
         </div>
     </div>
 
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyBlZ5ZtyTXgtXxSXJAx1jOxwhTrzlHRJmo",
+            apiKey: "AIzaSyBlZ5ZtyTXgtXxSJAx1jOxwhTrzlHRJmo",
             authDomain: "bk-cashier.firebaseapp.com",
             databaseURL: "https://bk-cashier-default-rtdb.asia-southeast1.firebasedatabase.app",
             projectId: "bk-cashier",
@@ -353,127 +216,113 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const menuItems = [
-            { id: 1, name: 'Воппер', price: 199, icon: 'fa-burger' },
-            { id: 2, name: 'Чизбургер', price: 89, icon: 'fa-cheese' },
-            { id: 3, name: 'Двойной Воппер', price: 329, icon: 'fa-burger' },
-            { id: 4, name: 'Лонг Чикен', price: 219, icon: 'fa-drumstick-bite' },
-            { id: 5, name: 'Стрипсы 3шт', price: 149, icon: 'fa-drumstick' },
-            { id: 6, name: 'Наггетсы 6шт', price: 159, icon: 'fa-cubes' },
-            { id: 7, name: 'Картофель фри', price: 119, icon: 'fa-french-fries' },
-            { id: 8, name: 'Кола', price: 99, icon: 'fa-wine-bottle' },
-            { id: 9, name: 'Морс', price: 109, icon: 'fa-mug-hot' },
-            { id: 10, name: 'Пирожок', price: 89, icon: 'fa-cake-candles' },
-            { id: 11, name: 'Двойной Чизбургер', price: 179, icon: 'fa-cheese' },
-            { id: 12, name: 'Биг Спешиал', price: 299, icon: 'fa-burger' },
-            { id: 13, name: 'Чикен Премьер', price: 249, icon: 'fa-drumstick-bite' },
-            { id: 14, name: 'Роял Чизбургер', price: 199, icon: 'fa-cheese' },
-            { id: 15, name: 'Бекон Бургер', price: 229, icon: 'fa-bacon' }
-        ];
+        let previousWaitingIds = new Set();
+        let previousReadyIds = new Set();
 
-        let timerInterval = null;
-        let timerSeconds = 10;
+        function updateHallBoard() {
+            db.ref('orders').once('value', (snapshot) => {
+                const orders = snapshot.val() || {};
+                const waitingOrders = [];
+                const readyOrders = [];
+                const currentWaitingIds = new Set();
+                const currentReadyIds = new Set();
 
-        function updateTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('ru-RU');
-            document.getElementById('liveTime').innerText = timeStr;
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+                Object.entries(orders).forEach(([id, order]) => {
+                    // Только заказы в ресторане, без доставки
+                    if (order.orderType !== 'restaurant') return;
+                    if (order.status === 'done' || order.status === 'courier') return;
+                    
+                    if (order.status === 'waiting') {
+                        waitingOrders.push({ id, ...order });
+                        currentWaitingIds.add(id);
+                    } else if (order.status === 'ready') {
+                        readyOrders.push({ id, ...order });
+                        currentReadyIds.add(id);
+                    }
+                });
 
-        function renderMenu() {
-            const grid = document.getElementById('menuGrid');
-            grid.innerHTML = '';
-            
-            menuItems.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'menu-item-card';
-                card.innerHTML = `
-                    <i class="fas ${item.icon}"></i>
-                    <div class="menu-item-name">${item.name}</div>
-                    <div class="menu-item-price">${item.price} ₽</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function showWaitingMode() {
-            document.getElementById('waitingMode').style.display = 'flex';
-            document.getElementById('orderMode').style.display = 'none';
-            document.getElementById('orderNumberMode').style.display = 'none';
-        }
-
-        function showOrderMode(order) {
-            document.getElementById('waitingMode').style.display = 'none';
-            document.getElementById('orderMode').style.display = 'block';
-            document.getElementById('orderNumberMode').style.display = 'none';
-            
-            const orderList = document.getElementById('orderItemsList');
-            let itemsHtml = '';
-            let total = 0;
-            
-            order.items.forEach(item => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                itemsHtml += `
-                    <div class="order-item-row fade-in">
-                        <span class="item-name">${item.name}</span>
-                        <span class="item-quantity">x${item.quantity}</span>
-                        <span class="item-price">${itemTotal} ₽</span>
-                    </div>
-                `;
-            });
-            
-            orderList.innerHTML = itemsHtml;
-            document.getElementById('orderTotalAmount').innerText = total + ' ₽';
-        }
-
-        function showOrderNumberMode(orderNum) {
-            document.getElementById('waitingMode').style.display = 'none';
-            document.getElementById('orderMode').style.display = 'none';
-            document.getElementById('orderNumberMode').style.display = 'flex';
-            
-            document.getElementById('orderNumberDisplay').innerText = orderNum;
-            
-            timerSeconds = 10;
-            document.getElementById('timerSeconds').innerText = timerSeconds;
-            document.getElementById('timerProgress').style.width = '100%';
-            
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timerSeconds--;
-                document.getElementById('timerSeconds').innerText = timerSeconds;
-                document.getElementById('timerProgress').style.width = (timerSeconds * 10) + '%';
+                // Проверка новых заказов (для визуального эффекта)
+                let hasNewWaiting = false;
+                for (const id of currentWaitingIds) {
+                    if (!previousWaitingIds.has(id)) {
+                        hasNewWaiting = true;
+                        break;
+                    }
+                }
                 
-                if (timerSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    showWaitingMode();
+                let hasNewReady = false;
+                for (const id of currentReadyIds) {
+                    if (!previousReadyIds.has(id)) {
+                        hasNewReady = true;
+                        break;
+                    }
                 }
-            }, 1000);
-        }
 
-        function setupFirebaseListener() {
-            db.ref('currentOrder').on('value', (snapshot) => {
-                const order = snapshot.val();
-                if (order && order.items && order.items.length > 0) {
-                    showOrderMode(order);
+                previousWaitingIds = currentWaitingIds;
+                previousReadyIds = currentReadyIds;
+
+                // Сортируем (новые сверху)
+                waitingOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                readyOrders.sort((a, b) => (b.readyAt || 0) - (a.readyAt || 0));
+
+                // Обновляем счётчики
+                document.getElementById('waitingCount').innerText = waitingOrders.length;
+                document.getElementById('readyCount').innerText = readyOrders.length;
+
+                // Рендерим список "ГОТОВИТСЯ"
+                const waitingList = document.getElementById('waitingList');
+                if (waitingOrders.length === 0) {
+                    waitingList.innerHTML = '<div class="empty-message"><i class="fas fa-check-circle"></i> Нет заказов</div>';
                 } else {
-                    showWaitingMode();
+                    waitingList.innerHTML = waitingOrders.map(order => `
+                        <div class="order-number-card waiting" data-order-id="${order.id}">
+                            <div class="number">${order.id}</div>
+                        </div>
+                    `).join('');
+                    
+                    if (hasNewWaiting) {
+                        const newCards = waitingList.querySelectorAll('.order-number-card');
+                        if (newCards.length > 0) {
+                            newCards[0].classList.add('new-order');
+                            setTimeout(() => newCards[0].classList.remove('new-order'), 500);
+                        }
+                    }
                 }
-            });
 
-            db.ref('paidOrders').limitToLast(1).on('child_added', (snapshot) => {
-                const order = snapshot.val();
-                if (order && order.orderNum) {
-                    showOrderNumberMode(order.orderNum);
+                // Рендерим список "ГОТОВ"
+                const readyList = document.getElementById('readyList');
+                if (readyOrders.length === 0) {
+                    readyList.innerHTML = '<div class="empty-message"><i class="fas fa-smile"></i> Нет заказов</div>';
+                } else {
+                    readyList.innerHTML = readyOrders.map(order => `
+                        <div class="order-number-card ready" data-order-id="${order.id}">
+                            <div class="number">${order.id}</div>
+                        </div>
+                    `).join('');
+                    
+                    if (hasNewReady) {
+                        const newCards = readyList.querySelectorAll('.order-number-card');
+                        if (newCards.length > 0) {
+                            newCards[0].classList.add('new-order');
+                            setTimeout(() => newCards[0].classList.remove('new-order'), 500);
+                        }
+                    }
                 }
+            }).catch(error => {
+                console.error('Ошибка:', error);
             });
         }
 
-        renderMenu();
-        setupFirebaseListener();
-        showWaitingMode();
+        // Слушаем изменения
+        function listenToChanges() {
+            db.ref('orders').on('child_changed', () => updateHallBoard());
+            db.ref('orders').on('child_added', () => updateHallBoard());
+            db.ref('orders').on('child_removed', () => updateHallBoard());
+        }
+
+        updateHallBoard();
+        listenToChanges();
+        setInterval(updateHallBoard, 5000);
     </script>
 </body>
 </html>
