@@ -2,203 +2,43 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>📺 ЗАЛ • WHOPPER BAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КУРЬЕР • WHOPPER BAR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Courier New', monospace;
-        }
-
-        body {
-            background: #0a0a0a;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .board {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            text-align: center;
-            color: #fec233;
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            text-shadow: 3px 3px 0 #c53a1f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        .column {
-            background: #1a1a1a;
-            border-radius: 30px;
-            overflow: hidden;
-            border: 3px solid #fec233;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .column-header {
-            background: #c53a1f;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 800;
-        }
-
-        .column-header i {
-            margin-right: 10px;
-        }
-
-        .column-header .count {
-            background: rgba(255,255,255,0.3);
-            border-radius: 40px;
-            padding: 5px 15px;
-            font-size: 1.2rem;
-            margin-left: 10px;
-        }
-
-        .orders-list {
-            padding: 20px;
-            min-height: 400px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            align-content: flex-start;
-        }
-
-        .order-number-card {
-            background: #2d2d2d;
-            border-radius: 20px;
-            padding: 20px 25px;
-            min-width: 120px;
-            text-align: center;
-            border-left: 6px solid;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .order-number-card.waiting {
-            border-left-color: #ff9800;
-            background: linear-gradient(135deg, #2d2d2d, #3a3a3a);
-        }
-
-        .order-number-card.ready {
-            border-left-color: #4CAF50;
-            background: linear-gradient(135deg, #2d4a2d, #1f3a1f);
-        }
-
-        .order-number-card .number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #fec233;
-            font-family: 'Courier New', monospace;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .empty-message {
-            text-align: center;
-            color: #555;
-            padding: 50px;
-            font-size: 1.2rem;
-            width: 100%;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #555;
-            font-size: 0.9rem;
-        }
-
-        .new-order {
-            animation: pulse 0.5s ease;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); background: #ff9800; }
-            50% { transform: scale(1.05); background: #ffcc00; }
-            100% { transform: scale(1); background: #2d2d2d; }
-        }
-
-        @media (max-width: 768px) {
-            .columns {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .order-number-card .number {
-                font-size: 1.8rem;
-            }
-            .column-header {
-                font-size: 1.3rem;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0d1b2a; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #f5a623; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .auth-card { background: white; border-radius: 40px; padding: 40px; max-width: 400px; margin: 50px auto; text-align: center; }
+        .auth-card input { width: 100%; padding: 15px; border: 2px solid #f5a623; border-radius: 60px; margin: 15px 0; }
+        .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
+        .order-card { background: white; border-radius: 20px; padding: 20px; border-left: 6px solid #2196F3; margin-bottom: 15px; }
+        .order-header { display: flex; justify-content: space-between; margin-bottom: 10px; }
+        .order-num { font-size: 1.3rem; font-weight: bold; color: #c53a1f; }
+        .status-badge { padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; font-weight: bold; }
+        .status-waiting { background: #ff9800; color: white; }
+        .status-to_pickup { background: #2196F3; color: white; }
+        .status-with_courier { background: #9c27b0; color: white; }
+        .status-courier_arrived { background: #4CAF50; color: white; }
+        .status-done { background: #999; color: white; }
+        .btn { border: none; padding: 10px 20px; border-radius: 40px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; }
+        .btn-depart { background: #2196F3; color: white; }
+        .btn-arrived { background: #4CAF50; color: white; }
+        .btn-deliver { background: #f5a623; color: #1a1a2e; }
+        .code-input { display: flex; gap: 10px; margin-top: 10px; }
+        .code-input input { flex: 1; padding: 10px; border: 2px solid #f5a623; border-radius: 40px; text-align: center; font-size: 1.2rem; letter-spacing: 3px; }
+        .address-info { background: #e3f2fd; padding: 10px; border-radius: 15px; margin: 10px 0; font-size: 0.9rem; }
     </style>
 </head>
 <body>
-    <div class="board">
-        <h1>
-            <i class="fas fa-tv"></i>
-            ТАБЛО ЗАЛА
-            <i class="fas fa-utensils"></i>
-        </h1>
+    <div class="container">
+        <h1><i class="fas fa-truck"></i> КУРЬЕР • WHOPPER BAR</h1>
         
-        <div class="columns">
-            <!-- Столбик "ГОТОВИТСЯ" -->
-            <div class="column">
-                <div class="column-header">
-                    <i class="fas fa-hourglass-half"></i>
-                    ГОТОВИТСЯ
-                    <span class="count" id="waitingCount">0</span>
-                </div>
-                <div class="orders-list" id="waitingList">
-                    <div class="empty-message">
-                        <i class="fas fa-check-circle"></i> Нет заказов
-                    </div>
-                </div>
-            </div>
-
-            <!-- Столбик "ГОТОВ" -->
-            <div class="column">
-                <div class="column-header">
-                    <i class="fas fa-check-circle"></i>
-                    ГОТОВО К ВЫДАЧЕ
-                    <span class="count" id="readyCount">0</span>
-                </div>
-                <div class="orders-list" id="readyList">
-                    <div class="empty-message">
-                        <i class="fas fa-smile"></i> Нет заказов
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <i class="fas fa-sync-alt fa-spin"></i> Автообновление • Только заказы в ресторане
+        <div id="ordersContainer">
+            <div class="orders-grid" id="ordersGrid"></div>
         </div>
     </div>
 
@@ -212,117 +52,89 @@
             messagingSenderId: "385000840969",
             appId: "1:385000840969:web:1ec8d09176b6551dc0fdd8"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        let previousWaitingIds = new Set();
-        let previousReadyIds = new Set();
+        let orders = {};
 
-        function updateHallBoard() {
-            db.ref('orders').once('value', (snapshot) => {
-                const orders = snapshot.val() || {};
-                const waitingOrders = [];
-                const readyOrders = [];
-                const currentWaitingIds = new Set();
-                const currentReadyIds = new Set();
-
-                Object.entries(orders).forEach(([id, order]) => {
-                    // Только заказы в ресторане, без доставки
-                    if (order.orderType !== 'restaurant') return;
-                    if (order.status === 'done' || order.status === 'courier') return;
-                    
-                    if (order.status === 'waiting') {
-                        waitingOrders.push({ id, ...order });
-                        currentWaitingIds.add(id);
-                    } else if (order.status === 'ready') {
-                        readyOrders.push({ id, ...order });
-                        currentReadyIds.add(id);
-                    }
-                });
-
-                // Проверка новых заказов (для визуального эффекта)
-                let hasNewWaiting = false;
-                for (const id of currentWaitingIds) {
-                    if (!previousWaitingIds.has(id)) {
-                        hasNewWaiting = true;
-                        break;
-                    }
-                }
-                
-                let hasNewReady = false;
-                for (const id of currentReadyIds) {
-                    if (!previousReadyIds.has(id)) {
-                        hasNewReady = true;
-                        break;
-                    }
-                }
-
-                previousWaitingIds = currentWaitingIds;
-                previousReadyIds = currentReadyIds;
-
-                // Сортируем (новые сверху)
-                waitingOrders.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-                readyOrders.sort((a, b) => (b.readyAt || 0) - (a.readyAt || 0));
-
-                // Обновляем счётчики
-                document.getElementById('waitingCount').innerText = waitingOrders.length;
-                document.getElementById('readyCount').innerText = readyOrders.length;
-
-                // Рендерим список "ГОТОВИТСЯ"
-                const waitingList = document.getElementById('waitingList');
-                if (waitingOrders.length === 0) {
-                    waitingList.innerHTML = '<div class="empty-message"><i class="fas fa-check-circle"></i> Нет заказов</div>';
-                } else {
-                    waitingList.innerHTML = waitingOrders.map(order => `
-                        <div class="order-number-card waiting" data-order-id="${order.id}">
-                            <div class="number">${order.id}</div>
-                        </div>
-                    `).join('');
-                    
-                    if (hasNewWaiting) {
-                        const newCards = waitingList.querySelectorAll('.order-number-card');
-                        if (newCards.length > 0) {
-                            newCards[0].classList.add('new-order');
-                            setTimeout(() => newCards[0].classList.remove('new-order'), 500);
-                        }
-                    }
-                }
-
-                // Рендерим список "ГОТОВ"
-                const readyList = document.getElementById('readyList');
-                if (readyOrders.length === 0) {
-                    readyList.innerHTML = '<div class="empty-message"><i class="fas fa-smile"></i> Нет заказов</div>';
-                } else {
-                    readyList.innerHTML = readyOrders.map(order => `
-                        <div class="order-number-card ready" data-order-id="${order.id}">
-                            <div class="number">${order.id}</div>
-                        </div>
-                    `).join('');
-                    
-                    if (hasNewReady) {
-                        const newCards = readyList.querySelectorAll('.order-number-card');
-                        if (newCards.length > 0) {
-                            newCards[0].classList.add('new-order');
-                            setTimeout(() => newCards[0].classList.remove('new-order'), 500);
-                        }
-                    }
-                }
-            }).catch(error => {
-                console.error('Ошибка:', error);
+        function loadOrders() {
+            db.ref('orders').on('value', (snapshot) => {
+                orders = snapshot.val() || {};
+                renderOrders();
             });
         }
 
-        // Слушаем изменения
-        function listenToChanges() {
-            db.ref('orders').on('child_changed', () => updateHallBoard());
-            db.ref('orders').on('child_added', () => updateHallBoard());
-            db.ref('orders').on('child_removed', () => updateHallBoard());
+        function getStatusText(status) {
+            const map = {
+                'waiting_pickup': '⏳ Ожидает отправки',
+                'to_pickup': '🚚 Едет в ПВЗ',
+                'with_courier': '🚚 У курьера',
+                'courier_arrived': '🚪 Курьер приехал',
+                'delivered': '📦 Выдан'
+            };
+            return map[status] || '⏳ Ожидает';
         }
 
-        updateHallBoard();
-        listenToChanges();
-        setInterval(updateHallBoard, 5000);
+        function renderOrders() {
+            const grid = document.getElementById('ordersGrid');
+            const ordersArray = Object.entries(orders).filter(([id, o]) => o.deliveryType === 'delivery' && o.status !== 'delivered');
+            if(ordersArray.length === 0) { grid.innerHTML = '<div style="background:white; border-radius:20px; padding:40px; text-align:center;">Нет заказов на доставку</div>'; return; }
+            
+            grid.innerHTML = ordersArray.map(([id, o]) => {
+                let actionHtml = '';
+                if(o.status === 'waiting_pickup') {
+                    actionHtml = `<button class="btn btn-depart" onclick="updateStatus('${id}', 'to_pickup')">🚚 Выехать к клиенту</button>`;
+                } else if(o.status === 'with_courier') {
+                    actionHtml = `<button class="btn btn-arrived" onclick="updateStatus('${id}', 'courier_arrived')">🚪 Курьер приехал</button>`;
+                } else if(o.status === 'courier_arrived') {
+                    actionHtml = `
+                        <div class="code-input">
+                            <input type="text" id="code-${id}" placeholder="6-значный код" maxlength="6">
+                            <button class="btn btn-deliver" onclick="checkCodeAndDeliver('${id}')">📦 Выдать</button>
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-num">#${id}</span>
+                            <span class="status-badge status-${o.status === 'with_courier' ? 'with_courier' : (o.status === 'courier_arrived' ? 'courier_arrived' : 'to_pickup')}">${getStatusText(o.status)}</span>
+                        </div>
+                        <div>${o.items.map(i => `${i.name} x${i.quantity}`).join(', ')}</div>
+                        <div style="font-weight:bold; margin:10px 0;">${o.total} ₽</div>
+                        ${o.address ? `<div class="address-info"><i class="fas fa-map-marker-alt"></i> ${o.address}</div>` : ''}
+                        <div class="pickup-code" style="font-family:monospace; background:#f0f0f0; padding:8px; border-radius:10px; text-align:center;">Код клиента: ${o.pickupCode}</div>
+                        ${actionHtml}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.updateStatus = (orderId, newStatus) => {
+            db.ref('orders/' + orderId).update({ status: newStatus });
+            if(newStatus === 'to_pickup') alert(`🚚 Заказ #${orderId} взят в доставку`);
+            if(newStatus === 'courier_arrived') alert(`🚪 Курьер приехал к клиенту, запросите код у клиента`);
+        };
+
+        window.checkCodeAndDeliver = (orderId) => {
+            const inputCode = document.getElementById(`code-${orderId}`).value;
+            const order = orders[orderId];
+            if(inputCode === order.pickupCode) {
+                db.ref('orders/' + orderId).update({ status: 'delivered' });
+                alert(`✅ Заказ #${orderId} выдан клиенту!`);
+                const utterance = new SpeechSynthesisUtterance(`Заказ номер ${orderId} выдан`);
+                utterance.lang = 'ru-RU';
+                speechSynthesis.speak(utterance);
+            } else {
+                alert(`❌ Неверный код! Правильный код: ${order.pickupCode}`);
+                const utterance = new SpeechSynthesisUtterance(`Неверный код`);
+                utterance.lang = 'ru-RU';
+                speechSynthesis.speak(utterance);
+            }
+        };
+
+        loadOrders();
     </script>
 </body>
 </html>
